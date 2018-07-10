@@ -83,6 +83,45 @@ router.post('/:groupid/adduser/:userid', passport.authenticate('jwt', {
     })
 })
 
+//@route        DELETE api/groups/:groupid/removeuser/:userid
+//@desc         Remove a user from a group
+//@acess        Private
+router.delete('/:groupid/adduser/:userid', passport.authenticate('jwt', {
+  session: false
+}), (req, res) => {
+  Group.findById({
+      _id: req.params.groupid
+    })
+    .then(group => {
+      // Check that user is in group and admin
+      const isMemberAndAdmin = group.members.filter(member => {
+        return member.user === req.user.id && member.admin
+      }).length > 0;
+      //Add user to group members array
+      if (isMemberAndAdmin) {
+        // Check that user to be removed is in group
+        const isInGroup = group.members.filter(member => member.user === req.params.userid).length > 0;
+        if (isInGroup) {
+          // Get remove index
+          const removeIndex = group.members.map(member => member.user).indexOf(req.params.userid);
+
+          // Splice user from members array
+          group.members.splice(removeIndex, 1);
+
+          group.save().then(group => res.json(group));
+        } else {
+          return res.status(400).json({
+            err: 'The user is not in this group'
+          })
+        }
+      } else {
+        return res.status(400).json({
+          err: 'Sorry, you are not authorized to add user'
+        })
+      }
+    })
+})
+
 
 //@route        DELETE api/groups/:id
 //@desc         Delete a group
