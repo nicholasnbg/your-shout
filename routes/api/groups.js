@@ -45,4 +45,43 @@ router.post('/', passport.authenticate('jwt', {
 })
 
 
+//@route        DELETE api/groups/:id
+//@desc         Delete a group
+//@acess        Private
+router.delete('/:id', passport.authenticate('jwt', {
+  session: false
+}), (req, res) => {
+  Group.findById({
+    _id: req.params.id
+  }).then(group => {
+    // Check if logged in user is member of group
+    const isMember = group.members.filter(member => {
+      return member.user === req.user.id
+    }).length > 0;
+    if (isMember) {
+      const member = group.members.filter(member => {
+        return member.user === req.user.id
+      })
+      const isAdmin = member[0].admin;
+      if (isAdmin) {
+        Group.findByIdAndRemove({
+          _id: req.params.id
+        }).then(() =>
+          res.json({
+            success: true
+          })
+        )
+      } else {
+        return res.status(400).json({
+          err: 'Sorry, you cannot delete this group'
+        })
+      }
+    } else {
+      return res.status(400).json({
+        err: 'Sorry, you cannot delete this group'
+      })
+    }
+  })
+})
+
 module.exports = router;
