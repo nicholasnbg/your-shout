@@ -13,7 +13,7 @@ const GroupSchema = new Schema({
       ref: 'users'
     },
     admin: {
-      type: boolean,
+      type: Boolean,
       default: false
     },
     avatar: {
