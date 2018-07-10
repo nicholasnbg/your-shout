@@ -8,6 +8,7 @@ const validateGroupInput = require('../../validation/group')
 
 //Load group Schema
 const Group = require('../../models/Group');
+const User = require('../../models/User');
 
 //@route        GET api/groups/test
 //@desc         Tests posts route
@@ -42,6 +43,44 @@ router.post('/', passport.authenticate('jwt', {
 
     newGroup.save().then(group => res.json(group))
   }
+})
+
+//@route        POST api/groups/:groupid/adduser/:userid
+//@desc         Add a user to a group
+//@acess        Private
+router.post('/:groupid/adduser/:userid', passport.authenticate('jwt', {
+  session: false
+}), (req, res) => {
+  Group.findById({
+      _id: req.params.groupid
+    })
+    .then(group => {
+      // Check that user is in group and admin
+      const isMemberAndAdmin = group.members.filter(member => {
+        return member.user === req.user.id && member.admin
+      }).length > 0;
+      //Add user to group members array
+      if (isMemberAndAdmin) {
+        //Bring up user info
+        User.findById({
+            _id: req.params.userid
+          })
+          .then(user => {
+            const newUser = {
+              user: user._id,
+              admin: false,
+              avatar: user.avatar
+            };
+            group.members.unshift(newUser);
+
+            group.save().then(group => res.json(group))
+          })
+      } else {
+        return res.status(400).json({
+          err: 'Sorry, you are not authorized to add user'
+        })
+      }
+    })
 })
 
 
