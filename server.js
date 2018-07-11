@@ -1,13 +1,17 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser')
-const passport = require('passport')
+const passport = require('passport');
+const dotenv = require('dotenv');
 
 const users = require('./routes/api/users');
 const groups = require('./routes/api/groups');
 const transactions = require('./routes/api/transactions');
+const rates = require('./routes/api/rates');
 
 const app = express();
+
+dotenv.config();
 
 //Body parser middleware
 app.use(bodyParser.urlencoded({
@@ -17,7 +21,7 @@ app.use(bodyParser.json());
 
 
 // DB config
-const db = require('./config/keys').mongoURI;
+const db = process.env.DB_URI;
 
 // Connect to mongoDB
 mongoose
@@ -35,6 +39,7 @@ require('./config/passport')(passport);
 app.use('/api/users', users);
 app.use('/api/groups', groups);
 app.use('/api/transactions', transactions);
+app.use('/api/rates', rates);
 
 //Set Port
 const port = process.env.port || 5000;
