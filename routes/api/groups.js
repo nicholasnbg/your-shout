@@ -67,7 +67,7 @@ router.post('/:groupid/adduser/:userid', passport.authenticate('jwt', {
     .then(group => {
       // Check that user is in group and admin
       const isMemberAndAdmin = group.members.filter(member => {
-        return member.user === req.user.id && member.admin
+        return member.user.toString() === req.user.id && member.admin
       }).length > 0;
       //Add user to group members array
       if (isMemberAndAdmin) {
@@ -76,6 +76,14 @@ router.post('/:groupid/adduser/:userid', passport.authenticate('jwt', {
             _id: req.params.userid
           })
           .then(user => {
+            //Check that user is not in group already
+            const isAlreadyInGroup = group.members.filter(member => member.user.toString() === req.params.userid.toString()).length > 0;
+            if (isAlreadyInGroup) {
+              return res.status(400).json({
+                err: 'That user is already in this group'
+              })
+            }
+            //Else add user to group
             const newUser = {
               user: user._id,
               admin: false,
