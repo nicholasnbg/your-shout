@@ -24,7 +24,23 @@ const GroupSchema = new Schema({
       type: Number,
       default: 0
     }
-  }]
+  }],
+  transactions: [{
+    users: [{
+      userid: {
+        type: String
+      },
+      amount: {
+        type: Number
+      }
+    }],
+    date: Date,
+    description: String
+  }],
+  showCurrency: {
+    type: Array,
+    default: ['usd']
+  }
 })
 
 module.exports = Group = mongoose.model('groups', GroupSchema);
