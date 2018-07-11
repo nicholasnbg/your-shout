@@ -9,7 +9,8 @@ const GroupSchema = new Schema({
   },
   members: [{
     user: {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: 'users',
       required: true
     },
     admin: {
@@ -18,6 +19,10 @@ const GroupSchema = new Schema({
     },
     avatar: {
       type: String
+    },
+    balance: {
+      type: Number,
+      default: 0
     }
   }]
 })
