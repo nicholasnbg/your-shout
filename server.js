@@ -5,6 +5,7 @@ const passport = require('passport')
 
 const users = require('./routes/api/users');
 const groups = require('./routes/api/groups');
+const transactions = require('./routes/api/transactions');
 
 const app = express();
 
@@ -33,6 +34,7 @@ require('./config/passport')(passport);
 // Use routes
 app.use('/api/users', users);
 app.use('/api/groups', groups);
+app.use('/api/transactions', transactions);
 
 //Set Port
 const port = process.env.port || 5000;

@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 // Load Validation
 const validateGroupInput = require('../../validation/group')
 
-//Load group Schema
+//Load Schemas
 const Group = require('../../models/Group');
 const User = require('../../models/User');
 
@@ -40,7 +40,8 @@ router.post('/', passport.authenticate('jwt', {
         admin: true,
         avatar: req.user.avatar,
         balance: 0
-      }]
+      }],
+      transactions: []
     })
     newGroup.save().then(group => {
       // Add group to admin users groups
