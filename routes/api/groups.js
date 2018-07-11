@@ -32,16 +32,26 @@ router.post('/', passport.authenticate('jwt', {
   if (!isValid) {
     return res.status(400).json(errors)
   } else {
+    // Create new group
     const newGroup = new Group({
       name: req.body.name,
       members: [{
         user: req.user.id,
         admin: true,
-        avatar: req.user.avatar
+        avatar: req.user.avatar,
+        balance: 0
       }]
     })
-
-    newGroup.save().then(group => res.json(group))
+    newGroup.save().then(group => {
+      // Add group to admin users groups
+      User.findById({
+          _id: req.user.id
+        })
+        .then(user => {
+          user.groups.unshift(group)
+          user.save().then(res.json(group))
+        })
+    })
   }
 })
 
@@ -69,10 +79,12 @@ router.post('/:groupid/adduser/:userid', passport.authenticate('jwt', {
             const newUser = {
               user: user._id,
               admin: false,
-              avatar: user.avatar
+              avatar: user.avatar,
+              balance: 0
             };
+            user.groups.unshift(group);
+            user.save();
             group.members.unshift(newUser);
-
             group.save().then(group => res.json(group))
           })
       } else {
