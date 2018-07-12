@@ -175,28 +175,28 @@ router.delete('/:id', passport.authenticate('jwt', {
   Group.findById({
     _id: req.params.id
   }).then(group => {
-    // Check if logged in user is member of group
-    const isMember = group.members.filter(member => {
-      return member.user === req.user.id
+    const isMemberAndAdmin = group.members.filter(member => {
+      return member.user.toString() === req.user.id && member.admin
     }).length > 0;
-    if (isMember) {
-      const member = group.members.filter(member => {
-        return member.user === req.user.id
-      })
-      const isAdmin = member[0].admin;
-      if (isAdmin) {
-        Group.findByIdAndRemove({
-          _id: req.params.id
-        }).then(() =>
-          res.json({
-            success: true
+    if (isMemberAndAdmin) {
+      group.members.forEach(member => {
+        User.findById({
+            _id: member.user
           })
-        )
-      } else {
-        return res.status(400).json({
-          err: 'Sorry, you cannot delete this group'
+          .then(user => {
+            const removeIndex = user.groups.map(userGroup => userGroup.group.toString()).indexOf(req.params.id);
+            user.groups.splice(removeIndex, 1);
+            console.log('removing group from user.groups')
+            user.save();
+          })
+      })
+      Group.findByIdAndRemove({
+        _id: req.params.id
+      }).then(() =>
+        res.json({
+          success: true
         })
-      }
+      )
     } else {
       return res.status(400).json({
         err: 'Sorry, you cannot delete this group'
