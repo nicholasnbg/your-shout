@@ -32,27 +32,45 @@ router.post('/', passport.authenticate('jwt', {
   if (!isValid) {
     return res.status(400).json(errors)
   } else {
-    // Create new group
-    const newGroup = new Group({
-      name: req.body.name,
-      members: [{
-        user: req.user.id,
-        admin: true,
-        avatar: req.user.avatar,
-        balance: 0
-      }],
-      transactions: []
-    })
-    newGroup.save().then(group => {
-      // Add group to admin users groups
-      User.findById({
-          _id: req.user.id
-        })
-        .then(user => {
-          user.groups.unshift(group)
-          user.save().then(res.json(group))
-        })
-    })
+    // Check that user is not in group with same name
+    User.findById({
+        _id: req.user.id
+      })
+      .then(user => {
+        // see if user in any groups with same group name as new group
+        const uniqueGroup = user.groups.map(userGroup => userGroup.name).filter(name => name === req.body.name).length === 0;
+        if (!uniqueGroup) {
+          errors.name = 'Sorry, you are already in a group with that name';
+          return res.status(400).json(errors)
+        } else {
+          // Create new group
+          const newGroup = new Group({
+            name: req.body.name,
+            members: [{
+              user: req.user.id,
+              admin: true,
+              avatar: req.user.avatar,
+              balance: 0
+            }],
+            transactions: []
+          })
+          newGroup.save().then(group => {
+            // Add group to admin users groups
+            User.findById({
+                _id: req.user.id
+              })
+              .then(user => {
+                const newUserGroup = {
+                  group,
+                  name: group.name
+                }
+                user.groups.unshift(newUserGroup)
+                user.save().then(res.json(group))
+              })
+          })
+        }
+
+      })
   }
 })
 
@@ -91,7 +109,11 @@ router.post('/:groupid/adduser/:userid', passport.authenticate('jwt', {
               avatar: user.avatar,
               balance: 0
             };
-            user.groups.unshift(group);
+            const newUserGroup = {
+              group,
+              name: group.name
+            }
+            user.groups.unshift(newUserGroup);
             user.save();
             group.members.unshift(newUser);
             group.save().then(group => res.json(group))

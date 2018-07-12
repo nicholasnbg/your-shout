@@ -19,7 +19,7 @@ router.post('/getrates', (req, res) => {
   }).then((date) => {
     if (date) {
       return res.status(400).json({
-        err: "Rates for today already downloaded"
+        err: "Rates for today already retrieved"
       })
     } else {
       // const rates = getTodaysRates();
@@ -32,9 +32,18 @@ router.post('/getrates', (req, res) => {
             date: today,
             data: res.data
           })
-          newRates.save().then(console.log('success'))
+          newRates.save()
         })
         .catch(err => console.log(err));
+      // getTodaysRates
+      //   .then(res => {
+      //     newRates = new Rates({
+      //       date: today,
+      //       data: res.data
+      //     })
+      //     newRates.save().then(console.log('Rates retrieved'))
+      //   })
+      //   .catch(err => console.log(err.message))
     }
     return res.json({
       msg: 'Rates added'
