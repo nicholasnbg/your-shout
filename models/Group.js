@@ -28,13 +28,13 @@ const GroupSchema = new Schema({
   transactions: [{
     users: [{
       userid: {
-        type: String
+        type: Schema.Types.ObjectId
       },
       amount: {
         type: Number
       }
     }],
-    date: Date,
+    date: String,
     description: String
   }],
   showCurrency: {
