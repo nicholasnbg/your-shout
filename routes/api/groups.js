@@ -89,6 +89,7 @@ router.post('/:groupid/adduser/:userid', passport.authenticate('jwt', {
         return member.user.toString() === req.user.id && member.admin
       }).length > 0;
       //Add user to group members array
+      //TODO: This is where we could use populate
       if (isMemberAndAdmin) {
         //Bring up user info
         User.findById({
