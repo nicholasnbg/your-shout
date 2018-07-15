@@ -17,6 +17,45 @@ router.get('/test', (req, res) => res.json({
   msg: 'Groups works'
 }));
 
+//@route        GET api/groups/:groupid
+//@desc         Gets group data
+//@access       Private route, must be group member
+router.get('/:groupid', passport.authenticate('jwt', {
+  session: false
+}), (req, res) => {
+  Group.findById({
+      _id: req.params.groupid
+    })
+    // .populate({
+    //   path: 'members',
+    //   populate: {
+    //     path: 'user',
+    //     model: 'User'
+    //   }
+    // })
+    // .exec((err, group) => {
+    //   if (err) {
+    //     console.log(err)
+    //   }
+    //   console.log(group)
+    //   return res.json(group);
+    // })
+    .then(group => {
+      //Check that user is member of group
+      const isMember = group.members.filter(member => {
+        return member.user.toString() === req.user.id
+      }).length > 0;
+      if (isMember) {
+        return res.json(group)
+      } else {
+        return res.status(400).json({
+          error: 'Sorry, you are not a member of this group'
+        })
+      }
+    })
+})
+
+
 //@route        POST api/groups
 //@desc         Create new group
 //@acess        Private
