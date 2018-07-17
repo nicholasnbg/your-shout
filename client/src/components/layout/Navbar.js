@@ -1,25 +1,63 @@
 import React, { Component } from "react";
-import { Menu, Container, Button } from "semantic-ui-react";
+import {
+  Collapse,
+  Navbar,
+  NavbarToggler,
+  NavbarBrand,
+  Nav,
+  NavItem,
+  NavLink,
+  UncontrolledDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem
+} from "reactstrap";
 
-class Navbar extends Component {
+class NavbarComponent extends Component {
+  constructor(props) {
+    super(props);
+
+    this.toggle = this.toggle.bind(this);
+    this.state = {
+      isOpen: false
+    };
+  }
+  toggle() {
+    this.setState({
+      isOpen: !this.state.isOpen
+    });
+  }
   render() {
     return (
       <div>
-        <Menu size="large" fixed={"top"}>
-          <Container>
-            <Menu.Item as="a">Your Shout</Menu.Item>
-            <Menu.Item as="a">About Us</Menu.Item>
-            <Menu.Item position={"right"}>
-              <Button as="a">Sign Up</Button>
-              <Button as="a" style={{ marginLeft: "0.5em" }}>
-                Login
-              </Button>
-            </Menu.Item>
-          </Container>
-        </Menu>
+        <Navbar color="dark" dark expand="md">
+          <NavbarBrand href="/">Your Shout</NavbarBrand>
+          <NavbarToggler onClick={this.toggle} />
+          <Collapse isOpen={this.state.isOpen} navbar>
+            <Nav className="ml-auto" navbar>
+              <NavItem>
+                <NavLink href="/">Sign Up</NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink href="/">Login</NavLink>
+              </NavItem>
+              {/* <UncontrolledDropdown nav inNavbar>
+                <DropdownToggle nav caret>
+                  Options
+                </DropdownToggle>
+                <DropdownMenu right>
+                  <DropdownItem>Option 1</DropdownItem>
+                  <DropdownItem>Option 2</DropdownItem>
+                  <DropdownItem divider />
+                  <DropdownItem>Reset</DropdownItem>
+                </DropdownMenu>
+              </UncontrolledDropdown> */}
+            </Nav>
+          </Collapse>
+        </Navbar>
       </div>
     );
   }
 }
 
-export default Navbar;
+export default NavbarComponent;
