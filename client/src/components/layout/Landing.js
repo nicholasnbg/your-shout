@@ -12,7 +12,7 @@ class Landing extends Component {
                 <div className="col-md-12 text-center">
                   <h1 className="display-3 mb-4">Your Shout</h1>
                   <p className="lead">
-                    Figure out whose round it is with Your Shout!
+                    Figure out whose round it is with <em>Your Shout</em>!
                   </p>
                   <br />
                   <Link to="/" className="btn btn-lg btn-info mr-2">
