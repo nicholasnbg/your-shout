@@ -10,6 +10,7 @@ import "./App.css";
 import NavbarComponent from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
 import Landing from "./components/layout/Landing";
+import Register from "./components/auth/Register";
 
 class App extends Component {
   render() {
@@ -21,7 +22,7 @@ class App extends Component {
             <Route exact path="/" component={Landing} />
             <div className="main-content container">
               {/* Public routes */}
-
+              <Route exact path="/register" component={Register} />
               {/* Private Routes */}
             </div>
             <Footer />
