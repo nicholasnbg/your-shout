@@ -3,7 +3,7 @@
 }
 
 .main-content.container {
-  min-height: calc(100vh - 200px);
+  min-height: calc(100vh - 128px);
 }
 
 img {
@@ -15,8 +15,8 @@ img {
   background: url('./img/showcase.jpg') no-repeat;
   background-size: cover;
   background-position: center;
-  height: calc(100vh - 90px);
-  margin-top: 0px;
+  height: calc(100vh - 128px);
+  margin-top: -1.5rem;
   margin-bottom: 0;
 }
 
