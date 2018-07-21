@@ -15,10 +15,10 @@ class Landing extends Component {
                     Figure out whose round it is with <em>Your Shout</em>!
                   </p>
                   <br />
-                  <Link to="/" className="btn btn-lg btn-info mr-2">
+                  <Link to="/register" className="btn btn-lg btn-info mr-2">
                     Sign Up
                   </Link>
-                  <Link to="/" className="btn btn-lg btn-light">
+                  <Link to="/login" className="btn btn-lg btn-light">
                     Login
                   </Link>
                 </div>
