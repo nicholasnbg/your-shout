@@ -52,6 +52,7 @@ export const setCurrentUser = (decoded) => {
   }
 }
 
+
 // Logout user
 export const logoutUser = () => dispatch => {
   // Remove token from local storage
