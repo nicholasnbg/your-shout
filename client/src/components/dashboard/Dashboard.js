@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { getUserInfo } from "../../actions/userActions";
 import Spinner from "../common/Spinner";
+import Groups from "./Groups";
 
 class Dashboard extends Component {
   componentDidMount() {
@@ -21,17 +22,7 @@ class Dashboard extends Component {
       {
         console.log(userInfo.groups);
       }
-      dashboardContent = (
-        <ul className="list-group">
-          {userInfo.groups.map(group => (
-            <Link to="/dashboard">
-              <li className="list-group-item list-group-item-action">
-                {group.name}
-              </li>
-            </Link>
-          ))}
-        </ul>
-      );
+      dashboardContent = <Groups groups={userInfo.groups} />;
     }
 
     return (
