@@ -149,6 +149,7 @@ router.get('/:id', passport.authenticate('jwt', {
   User.findById({
       _id: req.params.id
     })
+    .populate('groups.group')
     .then(user => {
       if (user) {
         return res.json(user)
@@ -157,6 +158,8 @@ router.get('/:id', passport.authenticate('jwt', {
     .catch(err => res.json(err))
 
 })
+
+
 
 
 module.exports = router;
