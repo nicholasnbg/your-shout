@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import { getUserInfo } from "../../actions/userActions";
 import Spinner from "../common/Spinner";
 
@@ -14,10 +15,23 @@ class Dashboard extends Component {
     const { userInfo, loading } = this.props.user;
     let dashboardContent;
 
-    if (loading) {
+    if (loading || !userInfo.groups) {
       dashboardContent = <Spinner />;
     } else {
-      dashboardContent = <h1>Hi there</h1>;
+      {
+        console.log(userInfo.groups);
+      }
+      dashboardContent = (
+        <ul className="list-group">
+          {userInfo.groups.map(group => (
+            <Link to="/dashboard">
+              <li className="list-group-item list-group-item-action">
+                {group.name}
+              </li>
+            </Link>
+          ))}
+        </ul>
+      );
     }
 
     return (
