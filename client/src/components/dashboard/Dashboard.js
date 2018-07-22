@@ -17,7 +17,7 @@ class Dashboard extends Component {
     if (loading) {
       dashboardContent = <Spinner />;
     } else {
-      dashboardContent = <h1>Hi</h1>;
+      dashboardContent = <h1>Hi there</h1>;
     }
 
     return (
