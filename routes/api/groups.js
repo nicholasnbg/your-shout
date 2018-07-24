@@ -26,24 +26,16 @@ router.get('/:groupid', passport.authenticate('jwt', {
   Group.findById({
       _id: req.params.groupid
     })
-    // .populate({
-    //   path: 'members',
-    //   populate: {
-    //     path: 'user',
-    //     model: 'User'
-    //   }
-    // })
-    // .exec((err, group) => {
-    //   if (err) {
-    //     console.log(err)
-    //   }
-    //   console.log(group)
-    //   return res.json(group);
-    // })
+    .populate('members.user')
     .then(group => {
+      if (!group) {
+        res.status(400).json({
+          msg: "Sorry, no group exists"
+        })
+      }
       //Check that user is member of group
       const isMember = group.members.filter(member => {
-        return member.user.toString() === req.user.id
+        return member.user._id.toString() === req.user.id
       }).length > 0;
       if (isMember) {
         return res.json(group)
