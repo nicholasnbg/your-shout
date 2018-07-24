@@ -30,7 +30,7 @@ If you would like to run/test/develop Your-Shout, you will need to create a Mong
 
 TODO: Show example .env file structure
 
-Once you have done this, please run npm-init in both the root folder, and the client folder.
+Once you have done this, please run npm install in both the root folder, and the client folder.
 
 Then you can run npm run dev from the root folder to spin up both backend and front end servers.
 
