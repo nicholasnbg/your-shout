@@ -10,8 +10,7 @@ const GroupSchema = new Schema({
   members: [{
     user: {
       type: Schema.Types.ObjectId,
-      ref: 'users',
-      required: true
+      ref: 'users'
     },
     admin: {
       type: Boolean,
