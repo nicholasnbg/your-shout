@@ -5,7 +5,13 @@ const Groups = ({ groups }) => {
   return (
     <ul className="list-group">
       {groups.map(group => (
-        <Link to="/dashboard">
+        <Link
+          key={group._id}
+          to={{
+            pathname: `/group`,
+            state: { groupId: group.group._id }
+          }}
+        >
           <li className="list-group-item list-group-item-action">
             {group.name}
           </li>
