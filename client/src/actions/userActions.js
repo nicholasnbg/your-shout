@@ -6,7 +6,6 @@ import {
 
 //Get Current User Info
 export const getUserInfo = (userId) => dispatch => {
-  console.log('running getuserinfo')
   dispatch(setUserLoading());
   axios.get(`/api/users/${userId}`)
     .then(res =>

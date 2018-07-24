@@ -3,3 +3,5 @@ export const GET_ERRORS = 'GET_ERRORS';
 export const SET_CURRENT_USER = 'SET_CURRENT_USER';
 export const GET_CURRENT_USER = 'GET_CURRENT_USER';
 export const USER_LOADING = 'USER_LOADING';
+export const GROUP_LOADING = 'GROUP_LOADING';
+export const GET_CURRENT_GROUP = 'GET_CURRENT_GROUP';

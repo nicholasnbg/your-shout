@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
 import { getUserInfo } from "../../actions/userActions";
 import Spinner from "../common/Spinner";
 import Groups from "./Groups";
@@ -19,9 +18,6 @@ class Dashboard extends Component {
     if (loading || !userInfo.groups) {
       dashboardContent = <Spinner />;
     } else {
-      {
-        console.log(userInfo.groups);
-      }
       dashboardContent = <Groups groups={userInfo.groups} />;
     }
 

@@ -13,6 +13,7 @@ import Landing from "./components/layout/Landing";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import Dashboard from "./components/dashboard/Dashboard";
+import Group from "./components/group/Group";
 import PrivateRoute from "./components/common/PrivateRoute";
 
 class App extends Component {
@@ -30,6 +31,9 @@ class App extends Component {
               {/* Private Routes */}
               <Switch>
                 <PrivateRoute exact path="/dashboard" component={Dashboard} />
+              </Switch>
+              <Switch>
+                <PrivateRoute exact path="/group" component={Group} />
               </Switch>
             </div>
             <Footer />
