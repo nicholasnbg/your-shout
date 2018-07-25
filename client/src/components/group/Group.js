@@ -4,6 +4,7 @@ import { getGroupInfo } from "../../actions/groupActions";
 import PropTypes from "prop-types";
 import Spinner from "../common/Spinner";
 import GroupMembers from "./GroupMembers";
+import AddMember from "./AddMember";
 
 class Group extends Component {
   componentDidMount() {
@@ -17,12 +18,15 @@ class Group extends Component {
     if (loading || !group) {
       groupContent = <Spinner />;
     } else {
-      groupContent = (
-        <div>
-          <p>This is a group</p>
-          {group.members && <GroupMembers members={group.members} />}
-        </div>
-      );
+      if (group.members) {
+        const isAdmin = group.members.filter(member => member.admin).length > 0;
+        groupContent = (
+          <div>
+            {group.members && <GroupMembers members={group.members} />}
+            {isAdmin ? <AddMember /> : null}
+          </div>
+        );
+      }
     }
 
     return (
