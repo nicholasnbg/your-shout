@@ -105,58 +105,63 @@ router.post('/', passport.authenticate('jwt', {
   }
 })
 
-//@route        POST api/groups/:groupid/adduser/:userid
+//@route        POST api/groups/:groupid/adduser/:userEmail
 //@desc         Add a user to a group
 //@acess        Private
-router.post('/:groupid/adduser/:userid', passport.authenticate('jwt', {
+router.post('/:groupid/adduser/:userEmail', passport.authenticate('jwt', {
   session: false
 }), (req, res) => {
+  const errors = {};
   Group.findById({
       _id: req.params.groupid
     })
+    .populate('members.user')
     .then(group => {
+
       // Check that user is in group and admin
       const isMemberAndAdmin = group.members.filter(member => {
-        return member.user.toString() === req.user.id && member.admin
+        return member.user._id.toString() === req.user.id && member.admin
       }).length > 0;
       //Add user to group members array
-      //TODO: This is where we could use populate
       if (isMemberAndAdmin) {
-        //Bring up user info
-        User.findById({
-            _id: req.params.userid
-          })
-          .then(user => {
-            //Check that user is not in group already
-            const isAlreadyInGroup = group.members.filter(member => member.user.toString() === req.params.userid.toString()).length > 0;
-            if (isAlreadyInGroup) {
-              return res.status(400).json({
-                err: 'That user is already in this group'
-              })
-            }
-            //Else add user to group
-            const newUser = {
-              user: user._id,
-              admin: false,
-              avatar: user.avatar,
-              balance: 0
-            };
-            const newUserGroup = {
-              group,
-              name: group.name
-            }
-            user.groups.unshift(newUserGroup);
-            user.save();
-            group.members.unshift(newUser);
-            group.save().then(group => res.json(group))
-          })
+        const isAlreadyInGroup = group.members.filter(member => member.email === req.params.userEmail).length > 0
+        if (isAlreadyInGroup) {
+          errors.user = "Sorry, that user is already a member of this group"
+          return res.status(400).json(
+            errors
+          )
+        } else {
+          User.findOne({
+              email: req.params.userEmail
+            })
+            .then(user => {
+              const newUser = {
+                user: user._id,
+                admin: false,
+                avatar: user.avatar,
+                balance: 0
+              };
+              const newUserGroup = {
+                group,
+                name: group.name
+              }
+              user.groups.unshift(newUserGroup);
+              user.save();
+              group.members.unshift(newUser);
+              group.save().then(group => res.json(group))
+            })
+            .catch(err => {
+              errors.email = "No such user exists";
+              return res.status(400).json(errors)
+            })
+        }
       } else {
-        return res.status(400).json({
-          err: 'Sorry, you are not authorized to add user'
-        })
+        errors.user = "Sorry you are not authorised to add a user"
+        return res.status(400).json(errors)
       }
     })
 })
+
 
 //@route        DELETE api/groups/:groupid/removeuser/:userid
 //@desc         Remove a user from a group
