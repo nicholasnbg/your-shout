@@ -23,7 +23,9 @@ class Group extends Component {
         groupContent = (
           <div>
             {group.members && <GroupMembers members={group.members} />}
-            {isAdmin ? <AddMember /> : null}
+            {isAdmin ? (
+              <AddMember currentGroup={this.props.group.group._id} />
+            ) : null}
           </div>
         );
       }

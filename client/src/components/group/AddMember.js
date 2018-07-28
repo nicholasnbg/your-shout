@@ -1,17 +1,30 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import TextFieldGroup from "../common/TextFieldGroup";
+import { addMember } from "../../actions/groupActions";
 
 class AddMember extends Component {
   constructor(props) {
     super(props);
     this.state = {
       modal: false,
-      email: ""
+      email: "",
+      errors: {}
     };
 
     this.toggle = this.toggle.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({
+        errors: nextProps.errors
+      });
+    }
   }
 
   onChange(e) {
@@ -20,13 +33,22 @@ class AddMember extends Component {
     });
   }
 
+  onSubmit(e) {
+    e.preventDefault();
+    this.props.addMember(
+      this.state.email,
+      this.props.currentGroup,
+      this.props.history
+    );
+  }
+
   toggle() {
     this.setState({
       modal: !this.state.modal
     });
   }
   render() {
-    // const {errors} = this.props;
+    const { errors } = this.props;
     return (
       <div>
         <Button color="success" onClick={this.toggle}>
@@ -47,11 +69,11 @@ class AddMember extends Component {
               type="email"
               value={this.state.email}
               onChange={this.onChange}
-              // error={errors.email}
+              error={errors.email}
             />
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={this.toggle}>
+            <Button color="primary" onClick={this.onSubmit}>
               Add member
             </Button>{" "}
             <Button color="secondary" onClick={this.toggle}>
@@ -63,4 +85,17 @@ class AddMember extends Component {
     );
   }
 }
-export default AddMember;
+
+const mapStateToProps = state => ({
+  errors: state.errors
+});
+
+AddMember.propTypes = {
+  errors: PropTypes.object.isRequired,
+  currentGroup: PropTypes.string.isRequired
+};
+
+export default connect(
+  mapStateToProps,
+  { addMember }
+)(AddMember);
