@@ -36,7 +36,7 @@ class Group extends Component {
         <div className="container">
           <div className="row">
             <div className="col-md-12">
-              <h1 className="display-4">Group {group.name}</h1>
+              {/* <h1 className="display-4">Group {group.name}</h1> */}
               {groupContent}
             </div>
           </div>

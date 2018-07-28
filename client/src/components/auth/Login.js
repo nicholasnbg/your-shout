@@ -11,8 +11,8 @@ class Login extends Component {
     this.onSubmit = this.onSubmit.bind(this);
 
     this.state = {
-      email: "",
-      password: "",
+      email: "nicholasnbg@gmail.com",
+      password: "password",
       errors: {}
     };
   }

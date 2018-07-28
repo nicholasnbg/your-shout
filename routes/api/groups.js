@@ -11,7 +11,7 @@ const Group = require('../../models/Group');
 const User = require('../../models/User');
 
 //@route        GET api/groups/test
-//@desc         Tests posts route
+//@desc         Tests posts route 
 //@access        public route
 router.get('/test', (req, res) => res.json({
   msg: 'Groups works'
@@ -45,6 +45,7 @@ router.get('/:groupid', passport.authenticate('jwt', {
         })
       }
     })
+    .catch(err => console.log(err))
 })
 
 

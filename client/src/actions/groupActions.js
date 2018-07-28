@@ -2,7 +2,8 @@ import axios from 'axios';
 import {
   GET_CURRENT_GROUP,
   GROUP_LOADING,
-  GET_ERRORS
+  GET_ERRORS,
+  DELETE_MEMBER
 } from '../actions/types';
 
 //Get Current Group Info
@@ -35,6 +36,19 @@ export const addMember = (memberEmail, groupId) => dispatch => {
       })
     )
 }
+
+//Remove member from group
+// export const removeMember = (userId, groupId) => dispatch => {
+//   axios.delete(`/api/groups/${groupId}/removeuser/${userId}`)
+//     .then(res => dispatch({
+//       type: DELETE_MEMBER,
+//       payload: {
+//         userId,
+//         groupId
+//       }
+//     }))
+//     .catch(err => console.log(err))
+// }
 
 
 
