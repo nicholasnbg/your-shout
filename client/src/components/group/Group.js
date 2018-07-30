@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "../../../node_modules/react-redux";
-import { getGroupInfo } from "../../actions/groupActions";
+import { getGroupInfo, removeMember } from "../../actions/groupActions";
 import PropTypes from "prop-types";
 import Spinner from "../common/Spinner";
 import GroupMembers from "./GroupMembers";
@@ -10,6 +10,10 @@ class Group extends Component {
   componentDidMount() {
     this.props.getGroupInfo(this.props.location.state.groupId);
   }
+
+  removeMember = user => {
+    this.props.removeMember(user, this.props.group.group._id);
+  };
 
   render() {
     const { loading, group } = this.props.group;
@@ -22,7 +26,13 @@ class Group extends Component {
         const isAdmin = group.members.filter(member => member.admin).length > 0;
         groupContent = (
           <div>
-            {group.members && <GroupMembers members={group.members} />}
+            {group.members && (
+              <GroupMembers
+                members={group.members}
+                removeMember={this.removeMember}
+                isAdmin={isAdmin}
+              />
+            )}
             {isAdmin ? (
               <AddMember currentGroup={this.props.group.group._id} />
             ) : null}
@@ -36,7 +46,7 @@ class Group extends Component {
         <div className="container">
           <div className="row">
             <div className="col-md-12">
-              {/* <h1 className="display-4">Group {group.name}</h1> */}
+              <h1 className="display-4">Group {group.name}</h1>
               {groupContent}
             </div>
           </div>
@@ -60,5 +70,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getGroupInfo }
+  { getGroupInfo, removeMember }
 )(Group);

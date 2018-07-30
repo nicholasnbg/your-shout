@@ -21,14 +21,14 @@ export default function (state = initialState, action) {
         group: action.payload,
         loading: false
       }
-      // case DELETE_MEMBER:
-      //   return {
-      //     ...state,
-      //     group: {
-      //       ...state.group,
+    case DELETE_MEMBER:
+      return {
+        ...state,
+        group: {
+          ...state.group,
 
-      //     }
-      //   }
+        }
+      }
 
     default:
       return state

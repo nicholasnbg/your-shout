@@ -1,6 +1,7 @@
 import React from "react";
 
-const GroupMembers = ({ members }) => {
+const GroupMembers = props => {
+  const { members, isAdmin } = props;
   return (
     <ul className="list-group">
       {members.map(member => (
@@ -13,6 +14,16 @@ const GroupMembers = ({ members }) => {
             {member.admin ? <small className="ml-3 mt-1">Admin</small> : null}
           </span>
           <span> {`$${member.balance}`}</span>
+          <span>
+            {isAdmin && !member.admin ? (
+              <button
+                onClick={() => props.removeMember(member.user._id)}
+                className="btn btn-danger"
+              >
+                Remove
+              </button>
+            ) : null}
+          </span>
         </li>
       ))}
     </ul>

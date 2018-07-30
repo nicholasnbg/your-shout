@@ -167,7 +167,7 @@ router.post('/:groupid/adduser/:userEmail', passport.authenticate('jwt', {
 //@route        DELETE api/groups/:groupid/removeuser/:userid
 //@desc         Remove a user from a group
 //@acess        Private
-router.delete('/:groupid/adduser/:userid', passport.authenticate('jwt', {
+router.delete('/:groupid/removeuser/:userid', passport.authenticate('jwt', {
   session: false
 }), (req, res) => {
   Group.findById({
@@ -176,19 +176,18 @@ router.delete('/:groupid/adduser/:userid', passport.authenticate('jwt', {
     .then(group => {
       // Check that user is in group and admin
       const isMemberAndAdmin = group.members.filter(member => {
-        return member.user === req.user.id && member.admin
+        return member.user.toString() === req.user.id.toString() && member.admin
       }).length > 0;
       //Add user to group members array
       if (isMemberAndAdmin) {
         // Check that user to be removed is in group
-        const isInGroup = group.members.filter(member => member.user === req.params.userid).length > 0;
+        const isInGroup = group.members.filter(member => member.user.toString() === req.params.userid).length > 0;
         if (isInGroup) {
           // Get remove index
-          const removeIndex = group.members.map(member => member.user).indexOf(req.params.userid);
+          const removeIndex = group.members.map(member => member.user.toString()).indexOf(req.params.userid);
 
           // Splice user from members array
           group.members.splice(removeIndex, 1);
-
           group.save().then(group => res.json(group));
         } else {
           return res.status(400).json({
@@ -197,7 +196,7 @@ router.delete('/:groupid/adduser/:userid', passport.authenticate('jwt', {
         }
       } else {
         return res.status(400).json({
-          err: 'Sorry, you are not authorized to add user'
+          err: 'Sorry, you are not authorized to remove user'
         })
       }
     })
