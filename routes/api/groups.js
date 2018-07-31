@@ -125,7 +125,7 @@ router.post('/:groupid/adduser/:userEmail', passport.authenticate('jwt', {
       }).length > 0;
       //Add user to group members array
       if (isMemberAndAdmin) {
-        const isAlreadyInGroup = group.members.filter(member => member.email === req.params.userEmail).length > 0
+        const isAlreadyInGroup = group.members.filter(member => member.user.email === req.params.userEmail).length > 0
         if (isAlreadyInGroup) {
           errors.user = "Sorry, that user is already a member of this group"
           return res.status(400).json(
@@ -188,6 +188,19 @@ router.delete('/:groupid/removeuser/:userid', passport.authenticate('jwt', {
 
           // Splice user from members array
           group.members.splice(removeIndex, 1);
+
+          //And take group out of Users User.group array
+          User.findById({
+              _id: req.params.userid
+            })
+            .then(user => {
+              console.log(user.groups)
+              const groupRemoveIndex = user.groups.map(group => group.group.toString()).indexOf(req.params.groupid);
+              console.log('removing group at index' + groupRemoveIndex)
+              user.groups.splice(groupRemoveIndex, 1);
+              user.save();
+            })
+
           group.save().then(group => res.json(group));
         } else {
           return res.status(400).json({
