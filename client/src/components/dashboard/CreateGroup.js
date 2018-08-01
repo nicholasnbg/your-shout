@@ -1,16 +1,16 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import TextFieldGroup from "../common/TextFieldGroup";
-import { addMember } from "../../actions/groupActions";
+import { createGroup } from "../../actions/groupActions";
+import { withRouter } from "../../../node_modules/react-router-dom";
+import { connect } from "react-redux";
 
-class AddMember extends Component {
+class CreateGroup extends Component {
   constructor(props) {
     super(props);
     this.state = {
       modal: false,
-      email: "",
+      groupName: "",
       errors: {}
     };
 
@@ -35,11 +35,11 @@ class AddMember extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-    this.props.addMember(
-      this.state.email,
-      this.props.currentGroup,
-      this.props.history
-    );
+    console.log("submitted create group");
+    const newGroup = {
+      name: this.state.groupName
+    };
+    this.props.createGroup(newGroup, this.props.auth.user.id);
   }
 
   toggle() {
@@ -47,34 +47,33 @@ class AddMember extends Component {
       modal: !this.state.modal
     });
   }
+
   render() {
-    const { errors } = this.props;
+    const { errors } = this.state;
     return (
       <div>
-        <Button color="success" className="mt-4" onClick={this.toggle}>
-          Add Member +
+        <Button color="primary" className="mt-4" onClick={this.toggle}>
+          Create Group
         </Button>
         <Modal
           isOpen={this.state.modal}
           toggle={this.toggle}
           className={this.props.className}
         >
-          <ModalHeader toggle={this.toggle}>
-            Add A Member to the Group
-          </ModalHeader>
+          <ModalHeader toggle={this.toggle}>Create a new group</ModalHeader>
           <ModalBody>
             <TextFieldGroup
-              placeholder="Email Address"
-              name="email"
-              type="email"
-              value={this.state.email}
+              placeholder="Group Name"
+              name="groupName"
+              type="text"
+              value={this.state.groupName}
               onChange={this.onChange}
-              error={errors.email}
+              error={errors.groupName}
             />
           </ModalBody>
           <ModalFooter>
             <Button color="primary" onClick={this.onSubmit}>
-              Add member
+              Create Group
             </Button>{" "}
             <Button color="secondary" onClick={this.toggle}>
               Cancel
@@ -87,15 +86,10 @@ class AddMember extends Component {
 }
 
 const mapStateToProps = state => ({
-  errors: state.errors
+  auth: state.auth
 });
-
-AddMember.propTypes = {
-  errors: PropTypes.object.isRequired,
-  currentGroup: PropTypes.string.isRequired
-};
 
 export default connect(
   mapStateToProps,
-  { addMember }
-)(AddMember);
+  { createGroup }
+)(withRouter(CreateGroup));

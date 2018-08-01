@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { getUserInfo } from "../../actions/userActions";
 import Spinner from "../common/Spinner";
 import Groups from "./Groups";
+import CreateGroup from "./CreateGroup";
 
 class Dashboard extends Component {
   componentDidMount() {
@@ -13,12 +14,18 @@ class Dashboard extends Component {
 
   render() {
     const { userInfo, loading } = this.props.user;
+    // const { loading } = this.state;
     let dashboardContent;
 
     if (loading || !userInfo.groups) {
       dashboardContent = <Spinner />;
     } else {
-      dashboardContent = <Groups groups={userInfo.groups} />;
+      dashboardContent = (
+        <React.Fragment>
+          <Groups groups={userInfo.groups} />
+          <CreateGroup />
+        </React.Fragment>
+      );
     }
 
     return (

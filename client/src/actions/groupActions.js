@@ -5,6 +5,9 @@ import {
   GET_ERRORS,
   DELETE_MEMBER
 } from '../actions/types';
+import {
+  getUserInfo
+} from './userActions';
 
 //Get Current Group Info
 export const getGroupInfo = (groupId) => dispatch => {
@@ -24,6 +27,19 @@ export const getGroupInfo = (groupId) => dispatch => {
     )
 }
 
+// Create Group
+export const createGroup = (groupName, userid, history) => dispatch => {
+  axios
+    .post(`/api/groups`, groupName)
+    .then(res => dispatch(getUserInfo(userid)))
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    )
+}
+
 // Add member to group
 export const addMember = (memberEmail, groupId) => dispatch => {
   axios.post(`/api/groups/${groupId}/adduser/${memberEmail}`)
@@ -39,7 +55,6 @@ export const addMember = (memberEmail, groupId) => dispatch => {
 
 //Remove member from group
 export const removeMember = (userId, groupId) => dispatch => {
-  console.log('in removerMember action')
   axios.delete(`/api/groups/${groupId}/removeuser/${userId}`)
     .then(res => dispatch({
       type: DELETE_MEMBER,
