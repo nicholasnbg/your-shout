@@ -1,6 +1,11 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { connect } from "../../../node_modules/react-redux";
-import { getGroupInfo, removeMember } from "../../actions/groupActions";
+import { withRouter } from "react-router-dom";
+import {
+  getGroupInfo,
+  removeMember,
+  deleteGroup
+} from "../../actions/groupActions";
 import PropTypes from "prop-types";
 import Spinner from "../common/Spinner";
 import GroupMembers from "./GroupMembers";
@@ -13,6 +18,10 @@ class Group extends Component {
 
   removeMember = user => {
     this.props.removeMember(user, this.props.group.group._id);
+  };
+
+  groupDelete = () => {
+    this.props.deleteGroup(this.props.group.group._id, this.props.history);
   };
 
   render() {
@@ -34,7 +43,17 @@ class Group extends Component {
               />
             )}
             {isAdmin ? (
-              <AddMember currentGroup={this.props.group.group._id} />
+              <Fragment>
+                <AddMember currentGroup={this.props.group.group._id} />
+                {
+                  <button
+                    onClick={() => this.groupDelete()}
+                    className="btn btn-danger mt-3"
+                  >
+                    Delete Group
+                  </button>
+                }
+              </Fragment>
             ) : null}
           </div>
         );
@@ -59,7 +78,9 @@ class Group extends Component {
 Group.proptypes = {
   auth: PropTypes.object.isRequired,
   user: PropTypes.object.isRequired,
-  getGroupInfo: PropTypes.func.isRequired
+  getGroupInfo: PropTypes.func.isRequired,
+  removeMember: PropTypes.func.isRequired,
+  deleteGroup: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -70,5 +91,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getGroupInfo, removeMember }
-)(Group);
+  { getGroupInfo, removeMember, deleteGroup }
+)(withRouter(Group));

@@ -3,7 +3,8 @@ import {
   GET_CURRENT_GROUP,
   GROUP_LOADING,
   GET_ERRORS,
-  DELETE_MEMBER
+  DELETE_MEMBER,
+  DELETE_GROUP
 } from '../actions/types';
 import {
   getUserInfo
@@ -67,7 +68,19 @@ export const removeMember = (userId, groupId) => dispatch => {
     .catch(err => console.log(err))
 }
 
+// Delete group
+export const deleteGroup = (groupId, history) => dispatch => {
 
+  axios.delete(`/api/groups/${groupId}`)
+    .then(res =>
+      dispatch({
+        type: DELETE_GROUP,
+        payload: groupId
+      })
+    )
+    .then(res => history.push('/dashboard'))
+    .catch(err => console.log(err))
+}
 
 
 //Set loading to true

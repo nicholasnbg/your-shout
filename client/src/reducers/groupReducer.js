@@ -1,7 +1,8 @@
 import {
   GET_CURRENT_GROUP,
   GROUP_LOADING,
-  DELETE_MEMBER
+  DELETE_MEMBER,
+  DELETE_GROUP
 } from '../actions/types';
 
 const initialState = {
@@ -20,6 +21,11 @@ export default function (state = initialState, action) {
       return {
         group: action.payload,
         loading: false
+      }
+    case DELETE_GROUP:
+      return {
+        ...state,
+
       }
     case DELETE_MEMBER:
       return {

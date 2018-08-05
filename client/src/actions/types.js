@@ -6,3 +6,4 @@ export const USER_LOADING = 'USER_LOADING';
 export const GROUP_LOADING = 'GROUP_LOADING';
 export const GET_CURRENT_GROUP = 'GET_CURRENT_GROUP';
 export const DELETE_MEMBER = 'DELETE_MEMBER';
+export const DELETE_GROUP = 'DELETE_GROUP';
