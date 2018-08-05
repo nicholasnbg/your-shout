@@ -51,7 +51,7 @@ class AddMember extends Component {
     const { errors } = this.props;
     return (
       <div>
-        <Button color="success" className="mt-4" onClick={this.toggle}>
+        <Button color="success" onClick={this.toggle}>
           Add Member +
         </Button>
         <Modal

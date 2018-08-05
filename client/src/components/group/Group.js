@@ -21,7 +21,9 @@ class Group extends Component {
   };
 
   groupDelete = () => {
-    this.props.deleteGroup(this.props.group.group._id, this.props.history);
+    if (window.confirm("Are you sure you want to delete this group?")) {
+      this.props.deleteGroup(this.props.group.group._id, this.props.history);
+    }
   };
 
   render() {
@@ -43,17 +45,21 @@ class Group extends Component {
               />
             )}
             {isAdmin ? (
-              <Fragment>
-                <AddMember currentGroup={this.props.group.group._id} />
-                {
-                  <button
-                    onClick={() => this.groupDelete()}
-                    className="btn btn-danger mt-3"
-                  >
-                    Delete Group
-                  </button>
-                }
-              </Fragment>
+              <div className="card mt-3">
+                <div className="card-body">
+                  <h5 className="card-title text-center">Admin Panel</h5>
+                  <span className="card-text d-flex justify-content-between">
+                    <AddMember currentGroup={this.props.group.group._id} />
+
+                    <button
+                      onClick={() => this.groupDelete()}
+                      className="btn btn-danger"
+                    >
+                      Delete Group
+                    </button>
+                  </span>
+                </div>
+              </div>
             ) : null}
           </div>
         );
