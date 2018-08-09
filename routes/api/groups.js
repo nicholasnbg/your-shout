@@ -194,9 +194,7 @@ router.delete('/:groupid/removeuser/:userid', passport.authenticate('jwt', {
               _id: req.params.userid
             })
             .then(user => {
-              console.log(user.groups)
               const groupRemoveIndex = user.groups.map(group => group.group.toString()).indexOf(req.params.groupid);
-              console.log('removing group at index' + groupRemoveIndex)
               user.groups.splice(groupRemoveIndex, 1);
               user.save();
             })

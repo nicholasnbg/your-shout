@@ -56,6 +56,7 @@ export const addMember = (memberEmail, groupId) => dispatch => {
 
 //Remove member from group
 export const removeMember = (userId, groupId) => dispatch => {
+  dispatch(setGroupLoading);
   axios.delete(`/api/groups/${groupId}/removeuser/${userId}`)
     .then(res => dispatch({
       type: DELETE_MEMBER,

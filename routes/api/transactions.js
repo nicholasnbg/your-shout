@@ -25,7 +25,9 @@ router.post(
         _id: req.params.groupid
       })
       .then(group => {
-        const transaction = req.body.transaction;
+        // const transaction = req.body.transaction;
+        const transaction = req.body;
+
         // THIS IS THE FORMAT OF A TRANSACTION
         // const transaction = {
         //   users: [{
@@ -35,7 +37,6 @@ router.post(
         //   date: "2018-07-15",
         //   description: "This is a test"
         // };
-        console.log(transaction)
         group.transactions.unshift(transaction);
         //update each members balance
         transaction.users.forEach(user => {

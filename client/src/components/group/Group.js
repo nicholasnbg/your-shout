@@ -10,6 +10,7 @@ import PropTypes from "prop-types";
 import Spinner from "../common/Spinner";
 import GroupMembers from "./GroupMembers";
 import AddMember from "./AddMember";
+import AddTransaction from "./AddTransaction";
 
 class Group extends Component {
   componentDidMount() {
@@ -44,6 +45,7 @@ class Group extends Component {
                 isAdmin={isAdmin}
               />
             )}
+            <AddTransaction groupMembers={this.props.group.group.members} />
             {isAdmin ? (
               <div className="card mt-3">
                 <div className="card-body">
